@@ -17,13 +17,15 @@ def getNumbers(a):
     assert (type(a) == str), "a is not a string"
     numbers = []
     temp = ''
-    for i in a:
-        if(i > '0' and i < '9'):
-            temp += i;
+    for i in range(0, len(a)):
+        if(a[i] > '0' and a[i] < '9'):
+            temp += a[i]
+            if(len(a)-1 == i):
+                numbers.append(int(temp))
         elif(temp != ''):
             numbers.append(int(temp))
             temp = ''
     return numbers
 
-print(getNumbers("halli123hoegaat1315het"))
+print(getNumbers("halli123hoegaat1315het12"))
 # print(getNumbers([1, 4, 6]))
