@@ -102,15 +102,23 @@ return
 """
 def nestedCorrectCheck(string):
     stack = mysrack()
+    openCount = 0
+    closeCount = 0
     for i in string:
         if(i == '{' or i == '[' or i == '(' or i == '<'):
             stack.push(i)
+            openCount += 1
         if(i == '}' or i == ']' or i == ')' or i == '>'):
+            closeCount += 1
             if(stack.peek() == getReversedBracket(i)):
                 stack.pop()
                 continue
             return False
+        if(closeCount != openCount):
+            return False
     return True
 
-print(nestedCorrectCheck("[()]"))
-print(nestedCorrectCheck("[(])"))
+print(True, nestedCorrectCheck("[()]"))
+print(False, nestedCorrectCheck("[()"))
+print(False, nestedCorrectCheck("[(])"))
+print(False, nestedCorrectCheck("[(])"))
