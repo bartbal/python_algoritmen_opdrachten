@@ -23,17 +23,14 @@ def machtv3(a,n):
     assert n > 0
 
     m = 1
-    machten = a
-
     while n > 0:
 
         if n % 2 == 0:
-
-            machten = machten * machten
+            a = a * a
             n//= 2
 
         else:
-            m = m * machten
+            m = m * a
             n -= 1
 
         count += 1
