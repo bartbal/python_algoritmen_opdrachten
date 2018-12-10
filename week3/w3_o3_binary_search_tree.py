@@ -6,11 +6,14 @@ class queue:
     def __repr__(self):
         return str(self.queue)
 
+    def length(self):
+        return len(self.queue)
+
     def enqueue(self, e):
         self.queue.append(e)
     
     def dequeue(self):
-        if len(self.queue) == 0:
+        if self.length() == 0:
             return None
         else:
             temp = self.queue[0] 
@@ -131,9 +134,6 @@ class BinaryNode:
         
         return False
 
-    def showLevelOrder(self, queue):
-        print('not done yet')
-        #hier kom ok even niet uit. wat is die haat tegen recursie toch telkens?    
 
         
 class BinaryTree:
@@ -187,10 +187,49 @@ class BinaryTree:
         return self.root.rinsert(e)
 
     def showLevelOrder(self):
-        queue = queue()
-        queue.enqueue(self.root)
-        self.root.showLevelOrder(queue)
+        tqueue = queue()
+        tqueue.enqueue([self.root])
+        temp = []
+        layer = []
+        layer.append(self.root.left)
+        layer.append(self.root.right)
+        while(True):
+            for node in layer:
+                if node != None:
+                    temp.append(node.left)
+                    temp.append(node.right)
+            if len(temp) == 0:
+                break
+            tqueue.enqueue(layer)
+            layer = temp
+            temp = []
+        total_space = (1 << tqueue.length()-1)*4
+        print('total space:', total_space)
+        temp = tqueue.dequeue()
+        while(True):
             
+            if(temp == None):
+                return
+            
+            spaces = ""
+
+            space_len = total_space - (len(temp)*4)
+            space_len /= (len(temp)+1)
+
+            spaces += "_"*int(round(space_len))
+            print(spaces, end = '')
+
+            for item in temp:
+                if item != None:
+                    s = '{:^4}'.format(item.element)
+                    print(s, end = "")
+                else:
+                    print(' No ' , end="")
+                print(spaces, end = "")
+            print()
+            temp = tqueue.dequeue()
+            
+
         
 
 def make_node(a):
@@ -208,7 +247,7 @@ def make_tree(a):
     return BinaryTree(root)
 
 
-array = [x for x in range(16)]
+array = [x for x in range(30)]
 tree = make_tree(array)
 
 print(tree.max())
@@ -217,5 +256,9 @@ print(tree.rsearch(9))
 print(tree.rsearch(20))
 print(tree.rinsert(20))
 
+print('queue')
+tree.showLevelOrder()
 
-print(tree)
+print('tree:', tree)
+
+print(tree.max())

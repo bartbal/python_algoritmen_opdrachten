@@ -45,8 +45,12 @@ class MyLinkedList:
 
         if self.tail: # self.tail != None:
             current = self.tail
+            start = current
             while current.next != None and current.next.data != e:
                 current = current.next
+                if(current == start):
+                    print(e, 'not found')
+                    return
             if(current.next != None and current != current.next):
                 if current.next == self.tail:
                     self.tail = current
@@ -60,6 +64,8 @@ class MyLinkedList:
 mylist = MyLinkedList()
 print(mylist)
 mylist.addLast(1)
+mylist.delete(99)
+print(mylist)
 mylist.addLast(2)
 mylist.addLast(3)
 mylist.addLast(4)
