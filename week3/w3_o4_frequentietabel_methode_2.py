@@ -1,62 +1,62 @@
-from typing import Tuple
-
-
-class TrieNode(object):
+class trieNode:
+    def __init__(self, name):
+        self.children = {}
+        self.name = name
+        self.occurrences = 0
     
-    def __init__(self, char: str):
-        self.char = char
-        self.children = []
-        self.word_finished = False
-        self.counter = 1
+    def toFile(self, file, s = ''):
+        for key in self.children:
+            self.children[key].toFile(file, s + self.name)
+
+        line = s + self.name + ':' + str(self.occurrences) + '\n'
+        file.write(line)
+
+    def print(self, s = ''):
+        for key in self.children:
+            self.children[key].print(s + self.name)
+
+        print(s + self.name, self.occurrences)
+
+            
+    def insert(self, word):
+        if(word == ''):
+            return
+        found = False
+        for key in self.children:
+            if(key == word[0]):
+                found = True
+                self.children[key].occurrences += 1
+                self.children[key].insert(word[1:])
+        if(not found):
+            self.children[word[0]] = trieNode(word[0])
+            self.insert(word)
+        return
+        
+
+
+class trie:
+    def __init__(self):
+        self.root = trieNode('')
     
+    def insert(self, word):
+        self.root.insert(word)
 
-def add(root, word: str):
-    node = root
-    for char in word:
-        found_in_child = False
-        for child in node.children:
-            if child.char == char:
-                child.counter += 1
-                node = child
-                found_in_child = True
-                break
-        if not found_in_child:
-            new_node = TrieNode(char)
-            node.children.append(new_node)
-            node = new_node
-    node.word_finished = True
+    def print(self):
+        self.root.print()
+
+    def toFile(self, filename):
+        file = open(filename,'w')
+        self.root.toFile(file)
 
 
-def find_prefix(root, prefix: str) -> Tuple[bool, int]:
-    node = root
-    if not root.children:
-        return False, 0
-    for char in prefix:
-        char_not_found = True
-        for child in node.children:
-            if child.char == char:
-                char_not_found = False
-                node = child
-                break
-        if char_not_found:
-            return False, 0
+tree = trie()
+tree.insert('hallo')
+tree.insert('hallo')
+tree.insert('hoi')
+tree.insert('haaaa')
+tree.insert('haa')
+tree.insert('pfffff')
+tree.insert('halen')
+tree.print()
 
-    return True, node.counter
-
-
-def getFrequentie(fileName):
-    trie = TrieNode('*')
-    f=open(fileName, 'r')
-    if f.mode == 'r':
-        contents = f.readlines()
-        for line in contents:
-            word = ''
-            for letter in line:
-                if letter.isalpha():
-                    word += letter
-                elif word != '':
-                    add(trie, word)
-    print(find_prefix(trie, 's'))                        
-getFrequentie('tekst')
-
-#nog niet af. ga denk ik een eigen trie class maken maar dat lukt niet meer voor de deadline
+tree.toFile('result2')
