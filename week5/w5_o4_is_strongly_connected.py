@@ -57,7 +57,6 @@ def is_strongly_connected(G, start):
         for u in V:
             for v in G[u]:
                nG[v].append(u)
-        print("test:",nG)
         return is_connected(nG, start)
     return False
 
