@@ -27,7 +27,8 @@ def vertices(G):
 def edges(G):
     return [(u,v) for u in vertices(G) for v in G[u]]
 
-#///////////////////////////////////////////////////////////////////
+#///////////////////////////////BFS////////////////////////////////////
+
 def is_connected_to(G,s, target):
     V = vertices(G)
     s.predecessor = None # s krijgt het attribuut 'predecessor'
@@ -47,32 +48,6 @@ def is_connected_to(G,s, target):
                 v.predecessor = u # v krijgt het attribuut 'predecessor'
                 q.enqueue(v)      # plaats v in de queue
     return False
-
-def get_bridges(G):
-    bridges = []
-    temp = None
-    V = vertices(G)
-    for u in V:
-        for v in range(len(G[u])):
-            temp = G[u][v]
-            G[u].pop(v)
-            G[temp].remove(u)
-            if not is_connected_to(G, u, temp):
-                bridges.append([u, temp])
-            G[u].insert(v, temp)
-            G[temp].append(u)
-    return bridges
-
-def is_bridge(G, A, B):
-    G[A].remove(B)
-    G[B].remove(A)
-    result = not is_connected_to(G, A, B)
-    G[A].append(B)
-    G[B].append(A)
-    return result
-
-#///////////////////////////////////////////////////////////////////
-
 
 def is_connected(G,s):
     V = vertices(G)
@@ -94,7 +69,19 @@ def is_connected(G,s):
         if v.distance == INFINITY:
             return False
     return True
+#/////////////////////////////end_BFS//////////////////////////////////////
 
+def is_bridge(G, A, B):
+    G[A].remove(B)
+    G[B].remove(A)
+    result = not is_connected_to(G, A, B)
+    G[A].append(B)
+    G[B].append(A)
+    return result
+
+#//////////////////opdracht/////////////////////////////
+
+#5a
 def is_euler(G):
         V = vertices(G)
         for u in V:
@@ -105,6 +92,7 @@ def is_euler(G):
                    return False
         return True
 
+#5b
 def get_euler_circuit(G, s):
     if not is_euler(G):
         return False
@@ -124,6 +112,8 @@ def get_euler_circuit(G, s):
             break
         if s == start:
             return result
+
+#/////////////////////////////////////test_cases///////////////////////////////////////////
 
 v = [Vertex(i) for i in range(3)]
 
@@ -177,3 +167,5 @@ G = {v[0]:[v[1],v[2]],
     v[7]:[v[4],v[6]]}
 
 print(get_euler_circuit(G, v[0]))
+
+#/////////////////////////////////end_test_cases///////////////////////////////////
